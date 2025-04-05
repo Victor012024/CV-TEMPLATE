@@ -198,6 +198,10 @@ function addSkill() {
   document.getElementById("skillsFields").appendChild(div);
 }
 
+function getPdfOrientation() {
+  return window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+}
+
 function downloadCV() {
   const cvData = JSON.parse(localStorage.getItem('cvData'));
   if (!cvData) {
@@ -206,12 +210,14 @@ function downloadCV() {
   }
 
   const element = document.querySelector('.show-result');
+  const orientation = getPdfOrientation()
+
   const options = {
-    margin: 10,
+    margin: 4,
     filename: `${cvData.personal.fullName || 'My'}_CV.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
   };
 
   html2pdf().set(options).from(element).save();
