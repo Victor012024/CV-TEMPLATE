@@ -205,14 +205,49 @@ function downloadCV() {
     return;
   }
 
+  // Store original styles and hide buttons
   const element = document.querySelector('.show-result');
-  const options = {
-    margin: 10,
-    filename: `${cvData.personal.fullName || 'My'}_CV.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  const buttonsContainer = document.querySelector('.back-button-container');
+  const originalStyles = {
+    padding: element.style.padding,
+    margin: element.style.margin,
+    buttonsDisplay: buttonsContainer.style.display
   };
 
-  html2pdf().set(options).from(element).save();
+  // Temporarily reduce spacing and hide buttons for PDF
+  element.style.padding = '10px';
+  element.style.margin = '0';
+  buttonsContainer.style.display = 'none';
+
+  const options = {
+    margin: [5, 5, 5, 5], // top, left, bottom, right
+    filename: `${cvData.personal.fullName || 'My'}_CV.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 1.5,
+      letterRendering: true,
+      useCORS: true
+    },
+    jsPDF: { 
+      unit: 'mm', 
+      format: 'a4', 
+      orientation: 'portrait',
+      compress: true
+    },
+    pagebreak: { 
+      mode: ['avoid-all', 'css', 'legacy'] 
+    }
+  };
+
+  // Generate PDF
+  html2pdf()
+    .set(options)
+    .from(element)
+    .save()
+    .then(() => {
+      // Restore original styles and show buttons
+      element.style.padding = originalStyles.padding;
+      element.style.margin = originalStyles.margin;
+      buttonsContainer.style.display = originalStyles.buttonsDisplay;
+    });
 }
