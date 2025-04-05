@@ -198,8 +198,6 @@ function addSkill() {
   document.getElementById("skillsFields").appendChild(div);
 }
 
-
-
 function downloadCV() {
   const cvData = JSON.parse(localStorage.getItem('cvData'));
   if (!cvData) {
@@ -212,7 +210,7 @@ function downloadCV() {
     margin: 10,
     filename: `${cvData.personal.fullName || 'My'}_CV.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 1 },
+    html2canvas: { scale: 2 },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
